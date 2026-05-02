@@ -1,0 +1,1326 @@
+{
+  "name": "qianghuaB V6.0",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -4352,
+        352
+      ],
+      "id": "f5a6a18a-5310-4a71-9b81-0ce1975e3369",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "302ed825-7092-80e6-bc78-d91afdcff96e",
+          "mode": "list",
+          "cachedResultName": "yemian_LIN",
+          "cachedResultUrl": "https://www.notion.so/302ed825709280e6bc78d91afdcff96e"
+        },
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "status|status",
+              "condition": "equals",
+              "statusValue": "未开始"
+            }
+          ]
+        },
+        "options": {
+          "sort": {
+            "sortValue": [
+              {
+                "key": "page_id|rich_text",
+                "direction": "ascending"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -4128,
+        352
+      ],
+      "id": "c4e7dae4-2a7f-4a92-b9d5-d46bcd54886f",
+      "name": "Get many database pages",
+      "credentials": {
+        "notionApi": {
+          "id": "vSePYO9AhpPWOe0E",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -3904,
+        352
+      ],
+      "id": "af77ab94-aa22-4e66-9196-959afd18bc3c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1568,
+        448
+      ],
+      "id": "3954bb1e-4c65-4165-9bc6-3fd1753871dc",
+      "name": "OpenAI Chat Model6",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {
+          "maxRetries": 2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1216,
+        448
+      ],
+      "id": "12c725fd-70f6-41bc-9445-7c2a337cfbbb",
+      "name": "OpenAI Chat Model8",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -864,
+        448
+      ],
+      "id": "ee173da8-c904-408b-a130-0964bf457dc3",
+      "name": "OpenAI Chat Model9",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "output",
+        "binaryPropertyName": "output",
+        "options": {
+          "fileName": "={{ $('Get many database pages').item.json.property_page_id }}.docx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1664,
+        224
+      ],
+      "id": "949931d5-e048-42d7-96fe-bd6cf3984360",
+      "name": "转成下载的文件docx1"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "output",
+        "name": "={{ $('Get many database pages').item.json.property_page_id }}.docx",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/182o0-sOlaCmFL3TR2uoAOGSaHY7L8Dzr",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1888,
+        224
+      ],
+      "id": "7f6a4853-a1fa-497f-914e-1e43f3db418a",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Iy84HXetAhkygbBq",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "update",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $('Get many database pages').item.json.id }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "status|status",
+              "statusValue": "完成"
+            },
+            {
+              "key": "out_put|rich_text",
+              "textContent": "={{ $json.webContentLink }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        2112,
+        352
+      ],
+      "id": "e832b5c6-93d9-4c9e-9e19-6618ceaafb92",
+      "name": "Update a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "vSePYO9AhpPWOe0E",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Loop Over Items').item.json.property_brand_name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2784,
+        224
+      ],
+      "id": "39f8b65f-c0c2-4220-b0b6-1c09795eb974",
+      "name": "FAQ"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Loop Over Items').item.json.property_product_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3248,
+        224
+      ],
+      "id": "4d117691-6e15-49a8-a995-0c96d7600429",
+      "name": "产品"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Loop Over Items').item.json.property_about_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "en-US,en;q=0.9"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -3680,
+        224
+      ],
+      "id": "94c8343c-f23c-4225-8866-19071c66142b",
+      "name": "主页"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## 🧠 Position\nYou are an SEO content writer specializing in international product detail pages.\nYour goal is to produce E-E-A-T-compliant, fact-based, and audience-specific content based on the company's actual website.\nYou will generate two outputs:\n(1) About Us section\n(2) FAQ section (4 items, approximately 400 characters each)\n\n---\n\n## 📥 Input\n**Homepage**: {{ $('AI Agent6').item.json.output }}\n**Product Page**: {{ $('Loop Over Items').item.json.property_product_url }}\n\n**Keywords**: {{ $('Loop Over Items').item.json.property_target_keywords }}\n**Audience Type**: {{ $('Loop Over Items').item.json.property_b_or_c }} ← (\"B-end\" refers to industrial buyers / \"C-end\" refers to retail consumers)\n\n---\n\n## 🧭 Style Rules\n\n### When {{ $('Loop Over Items').item.json.property_b_or_c }} = \"Business End\"\n- **Tone**: Formal, professional, and credible.\n- **Focus**: Engineering expertise, production capabilities, reliability, certifications, and long-term business trust.\n- **Tone**: Objective, authoritative, and professional.\n- **Avoid**: Emotional or marketing clichés.\n\n### When {{ $('Loop Over Items').item.json.property_b_or_c }} = \"Consumer End\"\n- **Tone**: Friendly, approachable, and brand-oriented.\n- **Focus**: Product quality, craftsmanship, user trust, and service support.\n- **Tone**: Conversational and reliable.\n- **Avoid**: Technical jargon or data-heavy wording.\n\n---\n\n## 🧾 Output Structure\n\n### 1. About Us\nLength: Approximately 150-200 characters\nStyle: Formal, credible, emphasizing industry experience\n\nThe last paragraph should include a brief call to action (1-2 sentences, 180 characters or less).\nUse professional and direct guidance to boost user engagement.\n\n**Examples of acceptable call-to-action tone**:\n- \"Contact our technical team for expert help!\"\n- \"Request a custom production plan now!\"\n- \"Contact us now for your custom quote!\"\n- \"Consult our experts for your next project!\"\n\n- Avoid restrictive terms like:\n**Explore, discover, unleash, unlock, innovate, transform, empower, reinvent, embrace, experience, elevate, enhance, optimize, step into, delve deeper, say goodbye, seamless, effortless, innovative, cutting-edge, game-changing, intelligent, limitless, powerful, next level, future-oriented, smart, ultimate, rugged.**\n\n---\n\n### 2. FAQ Section (4 entries, approximately 400 characters each)\nGenerate **4 unique FAQs** in English, following the \"Users Also Ask\" approach—\nthese are genuine user searches related to this product and company.\n\n**FAQ Requirements**:\n1. **Perspective (Crucial)**: \n   - **Questions**: Must be phrased from the customer's perspective (e.g., \"What materials can I use?\" or \"Do you offer...?\").\n   - **Answers**: Must be written in the **First Person (\"We\", \"Our\", \"Us\")** representing the company directly. Do NOT use \"The company\" or third-person phrasing.\n2. Each Q&A must be **100% factual** and based solely on the provided homepage, about page, or product page.\n3. Adhere to **E-E-A-T** and **Practical Content** principles.\n4. Cover a variety of buyer concerns: materials, customization, installation, logistics, or maintenance.\n5. Across the entire FAQ section, include at least **2 of the provided target keywords**, and every keyword must be shown in **bold** formatting. \n   - It is not necessary to use keywords in every single FAQ; ensure at least 2 appear naturally within the whole section.\n6. The tone, structure, and length of each answer must vary (approximately 400 characters, ±50 characters).\n7. Fabricated information (e.g., no minimum order quantity, no refunds, no free shipping, or false promises) is prohibited.\n8. Output must be in plain English:\n   - One line for the question (the whole question must be **bold**)\n   - One paragraph for the answer\n   - One line between FAQs\n\n**Important Formatting Rules**:\n- Every **question must be bolded**\n- Every answer must contain at least **two bolded target keywords** (if applicable based on keyword insertion rules above, otherwise ensure keywords are bolded when used).\n- Do not skip or omit bolding.\n\n---\n\n## ✅ Example Format\n\nFAQ Section\n\n**What materials can your duct making machine process?**  \nOur **HVAC duct making machine** supports galvanized steel up to 2.0 mm thick and stainless steel up to 1.5 mm thick. We ensure our equipment delivers precise forming and consistent performance for your production line.\n\n**How does your modular system improve production efficiency?**  \nWe designed each **duct making machine** to integrate punching, notching, and forming functions. This allows us to help you minimize processing time while maintaining precise dimensions for **HVAC duct making machine** manufacturing.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -928,
+        224
+      ],
+      "id": "b60dcf8e-4c7d-49fa-a408-7f29116dcf0f",
+      "name": "ABOUTFAQ"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## 🧠 ROLE\nYou are an expert SEO copywriter who specializes in creating professional, audience-specific product content for international websites.  \nYou can write for both **B2B (business buyers, engineers, procurement managers)** and **B2C (individual consumers)** audiences.  \n\n---\n\n## 📥 INPUT\n**Source Pages (HTML/Text):**  \n{{ $('AI Agent6').item.json.output }}\n\n** bolded Keywords:**  \n{{ $('Loop Over Items').item.json.property_target_keywords }}\n\n**Audience Type:**  \n{{ $('Loop Over Items').item.json.property_b_or_c }}  ← (Possible values: \"B-end\" or \"C-end\")\n\n---\n\n## 🧭 AUDIENCE STYLE RULES\n\n### When {{ $('Loop Over Items').item.json.property_b_or_c }}   = \"B-end\"\n- Tone: Professional, technical, data-driven, and formal.  \n- Focus: Performance, compatibility, ROI, engineering reliability, compliance, system integration, and efficiency.  \n- Sentence Style: Complex but precise. Avoid emotional or lifestyle expressions.  \n- Voice: “We/Our company provides…”, “This solution enables…”.  \n- Keywords should appear in **technical context**.  \n- Avoid exaggerated claims.\n\n### When {{ $('Loop Over Items').item.json.property_b_or_c }} = \"C-end\"\n- Tone: Conversational, inspiring, and accessible.  \n- Focus: User experience, design, comfort, lifestyle value, easy operation, and personal benefits.  \n- Sentence Style: Natural, flowing, emotional engagement allowed but still professional.  \n- Voice: “You’ll enjoy…”, “Perfect for those who want…”.  \n- Keywords should appear in **real-life context**.  \n- Avoid complex technical jargon.\n\n---\n\n## 🧾 OUTPUT STRUCTURE\n\n### 1. Short Description (200–220 characters)\n- Concisely convey the product's value and highlights.  \n- Include 2–3 target keywords naturally.  \n- Match tone to the selected audience type (B-end or C-end).  \n- Stay within the character count; avoid A.I. buzzwords.\n\n---\n\n### 2. Product Description (3 paragraphs, approx. 850 characters each)\n\nWrite three paragraphs of product description. Each paragraph must start with a **subheading** that is dynamically generated to match the actual content of the paragraph. Do not use fixed or repeated subheadings.  \n\n**Requirements:**  \n1. The three paragraphs must cover distinct dimensions:  \n   - One focusing on **functional positioning and target users**  \n   - One focusing on **technical features and measurable specifications**  \n   - One focusing on **industry applications or real-world value**  \n2. Each **subheading must be concise, relevant, and directly derived from the content of the paragraph** (not pre-set or generic).  \n3. Each paragraph must naturally include **2—4 bold keywords** from the target list.  \n4. Avoid repeating identical sentence structures (e.g., “This product is ideal for…”). Ensure variety in phrasing and tone.  \n5. Each paragraph should be about **850 characters** (excluding the subheading).  \n\n---\n\n### 3. Product Advantages (2 paragraphs, approx. 850 characters each)\nFocus on **specific, factual advantages** that fit the chosen audience.\n\n**Paragraph 1 — Structural / System / Design Advantages**  \nHighlight design logic, modular integration, or adaptation.  \nInclude **2-4 bold keywords**.\n\n**Paragraph 2 — Performance / Usability / User Value**  \nShow performance, ease of use, or value to end users.  \nInclude **2-4 bold keywords**.\n\n---\n\n#### 4. Use Scenarios (2 paragraphs, approx. 850 characters each)\n- Select **2 different scenario directions** from the previously generated “Use Scenarios” pool or related application contexts.  \n- Expand each into a detailed paragraph with a **clear subheading**.  \n- Each paragraph must explain:  \n  - The **industry environment or operational context** (e.g., outdoor survival, apparel manufacturing, industrial packaging, HVAC, logistics).  \n  - The **specific operational role** of the product in that context.  \n  - The **technical advantage, compliance factor, or performance benefit** the product provides.  \n  - How it integrates with workflows, user needs, or systems in that environment.  \n\n**Requirements:**  \n- Randomly choose **different scenario themes** each time to ensure variation across multiple products of similar type.  \n- Use a factual, professional tone — avoid characters, stories, or exaggerated lifestyle narratives.  \n- Each paragraph must include ** 2-4 bold keywords** naturally.  \n- Subheadings should directly reference the selected context (e.g., *“Application in Outdoor Rescue Operations”*, *“Role in Industrial Packaging and Logistics”*), not vague terms like *General Use* or *Commercial*.  \n\n\n---\n\n## ⚙️ GLOBAL RULES\n- Output must be **100% English only**.  \n- No Chinese, no translation hints.  \n- No Markdown code fences or JSON format in the final output.  \n- Always include clear subheadings for each paragraph.  \n- Keep tone consistent with the selected audience type (B or C).  \n- Avoid repetition or keyword stuffing.\n- The terms \"B2B\" and \"B2C\" are strictly prohibited throughout the text.",
+        "options": {
+          "systemMessage": "=** bolded Keywords:**  \n{{ $('Loop Over Items').item.json.property_target_keywords }}\n\n## Word Count & Keyword Insertion Requirements\n\n1. **Short Description**  \n   - Length: 200–220 characters  \n   - Must contain **2–3 bolded keywords**  \n\n2. **Product Description**  \n   - Structure: **3 paragraphs**, each approx. **850 characters**  \n   - Each paragraph must start with a clear, relevant subheading  \n   - Each paragraph must include **2–4 bolded keywords**  \n   - Coverage dimensions:  \n     - Functional positioning & target users  \n     - Technical features & measurable specifications  \n     - Industry applications & real-world value  \n\n3. **Product Advantages**  \n   - Structure: **2 paragraphs**, each approx. **850 characters**  \n   - Paragraph 1: Structural / System / Design Advantages (with **2–4 bolded keywords**)  \n   - Paragraph 2: Performance / Usability / User Value (with **2–4 bolded keywords**)  \n\n4. **Use Scenarios**  \n   - Structure: **2 paragraphs**, each approx. **850 characters**  \n   - Each must start with a subheading reflecting the scenario context  \n   - Each paragraph must include **2–4 bolded keywords**  \n   - Each scenario must describe:  \n     - Industry environment or operational context  \n     - Specific role of the product  \n     - Technical advantage or compliance factor  \n     - Workflow/system integration  \n\n---\n\n### Global Enforcement\n- Output must always be **100% English only**.  \n- Never merge sections; always follow the exact section structure.  \n- Each paragraph must strictly include **2–4 bolded keywords** from the provided keyword list.  \n- Keywords should be distributed evenly across all sections, not repeated in every paragraph.  \n- Perform a **self-check** before finalizingbut, but do not output the **self-check**:  \n  - Verify correct number of paragraphs per section.  \n  - Verify paragraph length within the required range.  \n  - Verify bolded keywords appear as required.  \n- If any rule is not met, regenerate internally until fully compliant before outputting.  \n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1280,
+        224
+      ],
+      "id": "21beb0c4-da2b-4fe3-8e4b-6716f66aece2",
+      "name": "SHORART"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## 🧠 ROLE\nYou are an **SEO Product Title Optimization Expert** for B2B industrial websites.\n\nYour job is to create concise, keyword-rich, and clickable product titles that follow Google SEO best practices while maintaining the **core product identity** from the source page.\n\n---\n\n## 📥 INPUT\n**Original Page Content:**  \n{{ $json.output }}\n\n**Relevant commercial keywords(must be included):**  \n{{ $('Get many database pages').item.json.property_target_keywords }}\n\n---\n\n## 🎯 TASK\nGenerate **one optimized SEO product title** based on the provided information.\n\n### ✅ Rules (STRICT ADHERENCE REQUIRED)\n1. **Length Limit:** The final output must be **strictly ≤ 60 characters** (including spaces). **This is the most important rule.**\n2. **Core Identity:** Retain the **core noun/identity** of the product (e.g., “Duct Line”) but **condense the original name** if necessary to fit the length limit.\n3. **Keywords:** Integrate **1 high-value keyword** (max 2 if space permits) from the list.\n4. **Structure:** Use one of the following structures strictly:\n   - **[Core Product Name] - [Keyword/Function]**\n   - **[Core Product Name] - [Keyword] & [Keyword]** (Only if short enough)\n5. **Connectors:** Use **“-”** or **“&”** only. No “|”, “/”, or commas.\n6. **No Exaggeration:** Do not invent features.\n7. **Tone:** Professional, clickable English. No generic adjectives like *Best, Top, Ultimate*.\n8. **Handling Long Inputs:**\n   - If the *Original Name* + *Keyword* > 60 characters, **shorten the Original Name** to its most essential words.\n   - If it still exceeds 60 characters, select a **shorter keyword** from the list.\n9. **Mandatory Keyword:** Include at least one business keyword from the list. **However, if the exact keyword causes the title to exceed 60 characters, you MUST choose a shorter relevant keyword or shorten the product name to fit.**\n10. **Natural Language:** The title must sound natural to a human reader.\n\n---\n\n## 🧾 Logic for Handling Length Conflicts\n**Priority Order:**\n1. **Stay under 60 Characters** (Highest Priority)\n2. **Keep Core Product Identity** (e.g., change \"Automatic Duct Production Line\" to \"Auto Duct Line\" if needed)\n3. **Include Commercial Keyword**\n\n**Input Example:**\nOriginal: Heavy Duty Automatic Duct Fabrication Production Line\nKeywords: hvac duct machine, sheet metal\n**Bad Output (Too Long):** Heavy Duty Automatic Duct Fabrication Production Line - HVAC Duct Machine (80+ chars)\n**Good Output (Optimized):** Auto Duct Production Line - HVAC Duct Machine (46 chars)\n\n---\n\n## 🧱 OUTPUT FORMAT\nOutput **exactly one line**, containing only the title string.",
+        "options": {
+          "systemMessage": "=Output Length must be ≤ 60 characters."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1632,
+        224
+      ],
+      "id": "0db00c89-cd55-4c82-8612-071c1eaea628",
+      "name": "Produname"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Markdown → HTML（高级修正版 for Coze拼接结构）\n * ✅ 修复 <p><h3> 嵌套\n * ✅ 支持 “·” 自动转换为 <ul><li>\n * ✅ 支持 ---### / ####Title 格式识别\n * ✅ 输出结构简洁、干净、可嵌入前端\n * ✅ 页面顶部展示来源 URL（来自：$('Loop Over Items').item.json.property_product_url）\n */\n\nconst input = $json.output || $json.merged_output || '';\nif (!input) {\n  return { html_output: '<p><em>No content available.</em></p>' };\n}\n\n// 取上一节点输出的 URL，并做安全处理\nfunction sanitizeUrl(u) {\n  try {\n    const raw = (u || '').toString().trim();\n    if (!raw) return '';\n    // 仅允许 http / https\n    if (!/^https?:\\/\\//i.test(raw)) return '';\n    // 简单属性转义，避免破坏 HTML\n    return raw\n      .replace(/\"/g, '%22')\n      .replace(/</g, '%3C')\n      .replace(/>/g, '%3E');\n  } catch {\n    return '';\n  }\n}\n\nconst sourceUrlRaw = $('Loop Over Items')?.item?.json?.property_product_url;\nconst sourceUrl = sanitizeUrl(sourceUrlRaw);\n\n// Step 1️⃣ 基础预处理\nlet md = input\n  .replace(/\\\\n/g, '\\n')\n  .replace(/\\\\t/g, '  ')\n  .replace(/\\r\\n/g, '\\n')\n  .replace(/-{3,}\\s*###/g, '\\n---\\n###')\n  .replace(/([a-z0-9])####/gi, '$1\\n####')\n  .replace(/([a-z0-9])###/gi, '$1\\n###')\n  .replace(/([a-z0-9])##/gi, '$1\\n##')\n // .replace(/([a-z0-9])#/gi, '$1\\n#')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\n// Step 2️⃣ 核心 Markdown → HTML 转换\nfunction markdownToHtml(md) {\n  let html = md;\n\n  // 安全转义\n  html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');\n\n  // 分隔线\n  html = html.replace(/^---$/gm, '<hr/>');\n\n  // 处理项目符号 “· ”\n  html = html.replace(/(?:^|\\n)·\\s*(.*?)(?=\\n|$)/g, '\\n<li>$1</li>');\n  html = html.replace(/(<li>.*<\\/li>)(\\s*<li>.*<\\/li>)+/g, match => `<ul>${match}</ul>`);\n\n  // FAQ 模式\n  html = html.replace(/\\*\\*Q(\\d+)\\.\\s*(.*?)\\*\\*/g, '<h4>Q$1. $2</h4>');\n  html = html.replace(/A:\\s*(.*)/g, '<p><strong>A:</strong> $1</p>');\n\n  // 标题\n  html = html.replace(/^#####\\s*(.*)$/gm, '<h5>$1</h5>');\n  html = html.replace(/^####\\s*(.*)$/gm, '<h4>$1</h4>');\n  html = html.replace(/^###\\s*(.*)$/gm, '<h3>$1</h3>');\n  html = html.replace(/^##\\s*(.*)$/gm, '<h2>$1</h2>');\n  html = html.replace(/^#\\s*(.*)$/gm, '<h1>$1</h1>');\n\n  // 加粗\n  html = html.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');\n\n  // 段落包装（排除标题、分隔线、ul/li）\n  html = html\n    .split('\\n')\n    .map(line => {\n      if (/^<h\\d|^<hr|^<ul>|^<\\/ul>|^<li>|^<\\/li>/.test(line.trim())) return line.trim();\n      if (!line.trim()) return '';\n      return `<p>${line.trim()}</p>`;\n    })\n    .join('\\n');\n\n  // 修正嵌套错误\n  html = html\n    .replace(/<p><h(\\d)>/g, '<h$1>')\n    .replace(/<\\/h(\\d)><\\/p>/g, '</h$1>')\n    .replace(/<p><hr\\/><\\/p>/g, '<hr/>')\n    .replace(/<\\/ul>\\s*<ul>/g, '')\n    .trim();\n\n  return html;\n}\n\n// Step 3️⃣ 转换执行\nconst bodyHtml = markdownToHtml(md);\n\n// 顶部 URL 区块（可按需改样式/文案）\nconst urlBanner = sourceUrl\n  ? `<div style=\"margin:0 0 12px; font-size:12px; opacity:.8;\">\n       <strong>Source:&nbsp;</strong>\n       <a href=\"${sourceUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">${sourceUrl}</a>\n     </div>`\n  : '';\n\nconst html_output = urlBanner + bodyHtml;\n\nreturn { html_output };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1216,
+        224
+      ],
+      "id": "643b68c2-18fd-4f80-9477-d0308329343b",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        464
+      ],
+      "id": "ea8d20ec-1763-4838-836d-dac38d42f684",
+      "name": "OpenAI Chat Model15",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## 🎯 TASK\nGenerate a 3-line **Short Description** for the product using the following rules:\n\n1. Extract the **core information** from the provided content:\n   - {{ $('Produname').item.json.output }}\n   - {{ $('SHORART').item.json.output }}\n\n2. Each line should:\n   - Start with “· ”\n   - Be concise (25–35 words per line)\n   - Highlight one key aspect: \n     (1) Function / Application  \n     (2) Performance / Efficiency  \n     (3) Benefit / Value to customer  \n\n3. Tone control:\n   - If {{ $('Loop Over Items').item.json.property_b_or_c }} = \"B-end\", use professional and technical tone.\n   - If {{ $('Loop Over Items').item.json.property_b_or_c }} = \"C-end\", use emotional and experiential tone.\n\n4. main keywords:\n  {{ $('Loop Over Items').item.json.property_target_keywords }}\n\n5. SEO rules:\n   - Naturally embed 1–2 main keywords from the content.\n   - Avoid repetition or keyword stuffing.\n   - Every occurrence of a keyword must be wrapped with **double asterisks** to ensure it is **bolded** in the final output.\n\n6. Output format (strictly follow):\n\n**new short**\n· [line 1: function/application, 25–35 words, with bolded keyword]  \n· [line 2: performance/efficiency, 25–35 words, with bolded keyword]  \n· [line 3: benefit/value, 25–35 words, with bolded keyword]\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        224
+      ],
+      "id": "66952f1a-65ae-4dac-aa61-47d12f8ca104",
+      "name": "shert"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// ✅ 获取节点内容\n// 直接获取字符串内容\nconst tkd = $('Merge').item.json.output || '';\nconst productTitle = $('Produname').item.json.output || '';\nconst shert = $json.output || '';\nconst shortArt = $('SHORART').item.json.output || '';\nconst aboutFaq = $('ABOUTFAQ').item.json.output || '';\n\n// ✅ 还原被转义的换行符 + 自动补标题换行\nfunction restoreNewlines(text) {\n  return (text || '')\n    .replace(/\\\\\\\\n/g, '\\n')        // 还原双层转义\n    .replace(/\\\\n/g, '\\n')          // 再还原单层转义\n    .replace(/\\r\\n/g, '\\n')         // 统一换行符\n    .replace(/(?<!\\n)(#{2,5}\\s)/g, '\\n$1') // 没有换行的标题前加换行\n    .replace(/(#+[^\\n]+)(?=#+)/g, '$1\\n')   // 连续标题之间加换行\n    .replace(/\\n{3,}/g, '\\n\\n')     // 最多保留两行空行\n    .trim();\n}\n\n// ✅ 清理 Markdown 格式（修复版：不再吞掉换行符）\nfunction cleanMarkdown(text) {\n  return restoreNewlines(text)\n    .replace(/^\\s+(?=#+)/gm, '') // 只清理行首的空格，不删除换行\n    .trim();\n}\n\n// ✅ 拼接（带分隔线）\nconst merged = [\n  cleanMarkdown(tkd),\n  cleanMarkdown(productTitle),\n  cleanMarkdown(shert),\n  cleanMarkdown(shortArt),\n  cleanMarkdown(aboutFaq)\n].filter(Boolean).join('\\n\\n---\\n\\n');\n\n// ✅ 输出\nreturn { merged_output: merged };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        224
+      ],
+      "id": "43bc14c8-0338-4e49-b09d-663e476e2acc",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=ROLE\n\nYou are an SEO content strategist with strong research ability.\nYour task is to generate accurate, diverse, and industry-relevant Use Scenarios for the target product by combining:\n\nThe given product page content (HTML/summary)\n\nVerified knowledge retrieved from Google search about similar products and real application scenarios\n\nInput\n\n{{ $json.output }}\n\n\n\nTask Instructions\n\nWeb Search Research\n\nActively search on Google for product-specific applications, usage environments, and customer use cases.\n\nReference competitor or industry websites (at least 3 sources) to validate scenarios.\n\nDo not copy; summarize into original professional phrasing.\n\nScenario Writing\n\nOutput 6–10 bullet points.\n\nEach scenario: 1–2 sentences, factual and industry-appropriate.\n\nEnsure diversity: cover different use environments (industrial, commercial, consumer, demo/trade show, R&D, etc.) where relevant.\n\nAvoid repetition and generic filler.\n\nIf the product page clearly shows specific industries (e.g., HVAC, medical devices), prioritize those.\n\nCompliance\n\nDo not fabricate technical features not supported by product type.\n\nDo not promise guarantees (e.g., free returns, MOQ) unless explicitly confirmed in the sources.\n\nKeep tone professional and neutral, suitable for SEO product detail pages.\n\nOutput Format (Markdown only)\nUse Scenarios\n\n[Scenario 1 title] — [1–2 sentence explanation grounded in product/industry context]\n\n[Scenario 2 title] — [1–2 sentence explanation]\n… (total 6–10 scenarios)\n\nSelf-Check Before Output\n\nAre all scenarios supported by real web findings (not hallucinated)?\n\nDid you avoid over-general generic “daily use” phrasing unless it really fits?\n\nAre the scenarios written in SEO-friendly phrasing, with keywords naturally integrated?\n\nIs there clear diversity of perspectives (not all focused on one environment)?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1984,
+        224
+      ],
+      "id": "95675c83-fbe4-44c4-ad8e-ca997705fca7",
+      "name": "AI Agent9"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1920,
+        448
+      ],
+      "id": "8046f0af-afe6-4ed7-98d0-96b7338669ac",
+      "name": "OpenAI Chat Model17",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-5-nano"
+        },
+        "options": {
+          "timeout": 240000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2320,
+        448
+      ],
+      "id": "7b1bfd8a-00d4-4a47-bdb1-59ff43a01937",
+      "name": "OpenAI Chat Model18",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Role\n\nYou are a professional SEO product content extraction and formatting specialist.\nYour primary responsibility is to identify and retain the product title from the product page as the main theme of the entire content.\nAll other extracted information (homepage, FAQ, About Us) is for supplementary reference only and must not overwrite or replace the product title.\n\nEnter HTML\n\nProduct Page (Main Page):\n{{ $('Code in JavaScript9').item.json.text }}\n\nFAQ/About Page (Reference Page):\n{{ $('Code in JavaScript8').item.json.text }}\n\nHomepage (Reference Page):\n{{ $json.text }}\n\nTask\n\nAnchoring the Product Title\n\nExtract the product title directly from the product page.\n\nClean up the title: remove unnecessary numbering, brackets, or placeholders.\n\nThis title defines the main theme of the page. All subsequent sections must align with it.\n\nGenerate supplementary sections that strictly align with the product title.\n\nHomepage/About Us may provide background information (company, certifications, services), but cannot redefine the product's focus.\n\nFAQs may provide formatting and tone, but must be relevant to the product.\n\nOutput Format (Markdown only, JSON and HTML are not supported):\n\nProduct Title\n\nExcerpt from the product page.\n\nSuccinct and readable, 60 characters or less.\n\nThis defines the topic of the page.\n\nProduct Description\n\n150-250 words.\n\nDescribe the product type, purpose, and benefits strictly according to the product title.\n\nUse supporting information from the Home/About Us section only to expand context, not to change the focus.\n\nDo not mention industries or applications unrelated to the product title.\n\nKey Features\n\n5-7 concise bullet points.\n\nMust reflect the attributes or implied qualities of the product title (e.g., for \"Tool Prototype\": Durability, Grip, Test Suitability).\n\nDo not use irrelevant technical claims.\n\nTechnical Specifications\n\nA list of measurable or technical data (dimensions, materials, model references) from the product page.\n\nIf missing, please enter \"Not specified on product page.\"\n\nUse Cases\n\n6-10 projects.\n\nAll scenarios must be directly related to the product title (e.g., \"Tool Prototype\" → Design Testing, Ergonomic Validation, Assembly Simulation, Training, Demonstration).\n\nDo not import industry information from \"About Us\" unless it appears on the product page itself.\n\nEach project: 1-2 sentences.\n\nFAQ Section\n\nExtract real Q&A from the product page or FAQ/About page.\n\nIf missing, generate 2-3 neutral, product-related FAQs (e.g., delivery time, customization, material selection).\n\n\nAbout Us\n- Extract ONLY the About Us main body text that appears on the product site’s \"About Us\" page. \n- Preserve the original wording exactly as shown, without rewriting, summarizing, or adding new content. \n- Do NOT include any extra sections such as company history timelines, corporate culture, certificates, equipment lists, product catalogs, form fields, or scripts. \n- Output only the main descriptive paragraph (the block of text under \"About Us\"), exactly as it appears, maintaining its authenticity.\n\n\nFormatting Rules\n\nUse clear Markdown headings.\n\nDo not use JSON, HTML, or code blocks.\n\nKeep the tone authentic and professional, centered around the product title.\n\nThe product title anchors all content.\n\nDo not exaggerate or fabricate any details.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2336,
+        224
+      ],
+      "id": "889f6e85-3a8b-460a-b353-48a24f52665f",
+      "name": "AI Agent6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 假设抓下来的内容在 items[0].json.data\nlet raw = items[0].json.data || \"\";\n\n// 1. 去掉所有 <img> 标签\nlet clean = raw.replace(/<img[^>]*>/g, \"\");\n\n// 2. 去掉所有 URL 链接\nclean = clean.replace(/https?:\\/\\/\\S+/g, \"\");\n\n// 3. 去掉所有 HTML 标签，保留纯文本\nclean = clean.replace(/<\\/?[^>]+(>|$)/g, \"\");\n\n// 4. 去掉多余的空格和换行\nclean = clean.replace(/\\s+/g, \" \").trim();\n\nreturn [{ json: { text: clean } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3456,
+        224
+      ],
+      "id": "927bab4c-48c7-45db-acd8-942055a15ab2",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 假设抓下来的内容在 items[0].json.data\nlet raw = items[0].json.data || \"\";\n\n// 1. 去掉所有 <img> 标签\nlet clean = raw.replace(/<img[^>]*>/g, \"\");\n\n// 2. 去掉所有 URL 链接\nclean = clean.replace(/https?:\\/\\/\\S+/g, \"\");\n\n// 3. 去掉所有 HTML 标签，保留纯文本\nclean = clean.replace(/<\\/?[^>]+(>|$)/g, \"\");\n\n// 4. 去掉多余的空格和换行\nclean = clean.replace(/\\s+/g, \" \").trim();\n\nreturn [{ json: { text: clean } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3008,
+        224
+      ],
+      "id": "dca71ab6-b716-4002-91ef-f8dd9200552f",
+      "name": "Code in JavaScript9"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 假设抓下来的内容在 items[0].json.data\nlet raw = items[0].json.data || \"\";\n\n// 1. 去掉所有 <img> 标签\nlet clean = raw.replace(/<img[^>]*>/g, \"\");\n\n// 2. 去掉所有 URL 链接\nclean = clean.replace(/https?:\\/\\/\\S+/g, \"\");\n\n// 3. 去掉所有 HTML 标签，保留纯文本\nclean = clean.replace(/<\\/?[^>]+(>|$)/g, \"\");\n\n// 4. 去掉多余的空格和换行\nclean = clean.replace(/\\s+/g, \" \").trim();\n\nreturn [{ json: { text: clean } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2560,
+        224
+      ],
+      "id": "283f3677-29a9-4bf4-9a53-2a934b9b606b",
+      "name": "Code in JavaScript10"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -4352,
+        1600
+      ],
+      "id": "46012cfb-5670-40cc-a16c-ab62d7359d76",
+      "name": "OpenAI Chat Model19",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -4352,
+        1424
+      ],
+      "id": "3b65d569-b8f9-4643-ad07-7514360e8435",
+      "name": "元描述1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let html = $json.html_output || '';\n\nlet keywordsRaw = $('Loop Over Items').first().json.property_target_keywords || '';\nlet keywords = [];\n\n// 支持换行分隔 & 逗号分隔\nif (typeof keywordsRaw === 'string') {\n  keywords = keywordsRaw\n    .split(/\\r?\\n|,/) // 同时支持换行或逗号\n    .map(k => k.trim())\n    .filter(Boolean);\n} else if (Array.isArray(keywordsRaw)) {\n  keywords = keywordsRaw.map(k => k.trim()).filter(Boolean);\n}\n\n// 循环替换：把 <strong>关键词</strong> → <span style=\"color:#ff6600;\">关键词</span>\nkeywords.forEach(keyword => {\n  const regex = new RegExp(`<strong>\\\\s*${keyword}\\\\s*<\\/strong>`, \"gi\");\n  html = html.replace(regex, `<span style=\"color:#ff6600;\">${keyword}</span>`);\n});\n\nreturn { output: html };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5424,
+        2128
+      ],
+      "id": "285f2f15-57ae-4617-919f-0642b0fb97de",
+      "name": "Code in JavaScript11"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gptproto.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "sk-f73dcc08aa0e4bd38f3bbd08d13ef9e4"
+            },
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"gpt-4.1-mini\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Hello, can you hear me?\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4352,
+        976
+      ],
+      "id": "c4ba7da4-aaf3-40a3-85a1-4ad5fbb10763",
+      "name": "主页1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gptproto.com/v1/responses",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "sk-f73dcc08aa0e4bd38f3bbd08d13ef9e4"
+            },
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"gpt-4.1-mini\",\n  \"tools\": [\n    {\n      \"type\": \"web_search_preview\"\n    }\n  ],\n  \"input\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"input_text\",\n          \"text\": \"现在的北京时间和日期，以及今天广州的气温\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4352,
+        1200
+      ],
+      "id": "18594d75-941f-4211-9cf9-d78ce280f7ce",
+      "name": "主页2"
+    },
+    {
+      "parameters": {
+        "url": "=https://vape-sell.com/products/manchester?VariantsId=10484",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4352,
+        752
+      ],
+      "id": "3e797892-c60e-4cac-af02-097229c4fb1a",
+      "name": "主页3"
+    },
+    {
+      "parameters": {
+        "jsCode": "let html = $json.html_output || '';\n\nlet keywordsRaw = $('Loop Over Items').first().json.property_target_keywords || '';\nlet keywords = [];\n\n// 支持换行与逗号分隔\nif (typeof keywordsRaw === 'string') {\n  keywords = keywordsRaw\n    .split(/\\r?\\n|,/) // 同时支持换行或逗号\n    .map(k => k.trim())\n    .filter(Boolean);\n} else if (Array.isArray(keywordsRaw)) {\n  keywords = keywordsRaw.map(k => k.trim()).filter(Boolean);\n}\n\n// 转义正则特殊字符\nfunction escapeRegExp(str) {\n  return str.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\n}\n\n// 遍历关键词，替换为彩色高亮 span\nkeywords.forEach(keyword => {\n  const safeKeyword = escapeRegExp(keyword);\n  // 你的原始正则：确保不替换标签属性内的词\n  const regex = new RegExp(`(?![^<]*>)\\\\b(${safeKeyword})\\\\b`, \"gi\");\n  // 如果你需要保持 strong，就用 strong；如果需要加颜色，可以在 style 里加 color\n  html = html.replace(regex, `<strong>$1</strong>`);\n});\n\n// --- 新增代码开始 ---\n// 在最后给整体包一层 div，设置字体为 Arial\n// 加上 ,sans-serif 是为了作为后备字体（标准写法）\nif (html) {\n    html = `<div style=\"font-family: Arial, sans-serif;\">${html}</div>`;\n}\n// --- 新增代码结束 ---\n\nreturn { output: html };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        224
+      ],
+      "id": "b2ab77e8-b523-40a0-8791-200f6cb70efb",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3be120a7-878d-4f99-ae95-b8355e3f58cc",
+              "leftValue": "={{ $('Get many database pages').item.json.property_b_or_c }}",
+              "rightValue": "B-end",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -576,
+        224
+      ],
+      "id": "28f4b3d9-c932-42db-909a-4e92b4f9aaba",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "=gemini-3.1-flash-lite-preview",
+          "mode": "id"
+        },
+        "options": {
+          "timeout": 240000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        240
+      ],
+      "id": "eb4eda4d-dc43-49e2-9ca2-06058d0d79dd",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "eyGyRIDiNtDHKuci",
+          "name": "yun"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Role\nYou are a specialized **B2B Industrial SEO Copywriter**. Your target audience includes **Procurement Officers, Wholesalers, and Technical Engineers**. Your goal is to write authoritative, factual, and high-conversion Meta Tags for bulk/commercial buyers.\n\n# Input Data\nProduct Info: {{ $('SHORART').item.json.output }}\nBusiness Keywords List: {{ $('Get many database pages').item.json.property_target_keywords }}\n**Target Opening Style**: {{ $json.selected_style }} \n\n# Constraints (Strict Execution)\n\n## 1. Title (T)\n- **Length:** <= 65 characters (counting spaces).\n- **Separators:** ONLY use \"-\".\n- **Format:** [Product Name/Category] - [**Technical Spec/Industrial Application**]\n- **B2B Check:** Title must imply professional grade, manufacturing, or supply capabilities.\n\n## 2. Keywords (K)\n- Select exactly **3** most relevant keywords from the \"Business Keywords List\".\n\n## 3. Description (D)\n- **Length:** <= 165 characters (soft limit, prioritize natural grammar over strict character counts if necessary).\n- **Mandatory Opening:** You **MUST** start the description strictly following the \"**Target Opening Style**\" provided above. \n- **Tone & Grammar:** **Industrial, Objective, Specification-focused. Ensure natural, native English phrasing. DO NOT sacrifice grammar for rigid keyword stuffing.**\n- **Content:** Focus on **capacity, certification, technical specs, or bulk supply**.\n\n## 4. Negative Constraints (CRITICAL)\n- **DO NOT USE B2C Words:** \"Amazing\", \"Stunning\", \"Cheap\", \"Best\", \"Don't miss\", \"Love\", \"Perfect for you\".\n- **DO NOT USE C-Level CTAs:** \"Buy now\", \"Shop today\". \n- **ANTI-HALLUCINATION:** NEVER invent model numbers, certifications (e.g., ISO, CE), exact lead times, or production capacity numbers if they are not explicitly provided in the \"Product Info\". Use the fallback instructions instead.\n\n## 5. Formatting Requirement\n- **Bold Keywords:** You MUST use markdown bolding (**keyword**) for any selected \"Business Keywords\" that appear in the Title or Description.\n\n# Output Format\nT: [Title with **bold** keywords]\nD: [Description starting with specific style and **bold** keywords]\nK: [Keyword 1], [Keyword 2], [Keyword 3]",
+        "options": {
+          "systemMessage": "=Title (T):Must be less than 60 characters.\nDescription (D) – **UPDATED FOR VARIETY**\n**Constraint:** Strictly **≤ 160 characters**.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9dec3caf-05a1-40b9-9f88-2ac3a1f3437d",
+      "name": "B端描述"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        656
+      ],
+      "id": "df5f3dfe-b24c-4cb1-97b3-3680ec97a0c5",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "qSm4rH7bp3COLHAD",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=## 🧠 Position\nYou are an SEO content generator specializing in TKD (Title, Description, Keywords) writing for international product pages.\n\n---\n\n## 📥 INPUT\n**Product Page Content:** {{ $('AI Agent6').item.json.output }} (Ensure you parse the specific specs/features from here)\n**Keywords:** {{ $('Loop Over Items').item.json.property_target_keywords }}\n\n\n---\n\n## 🧭 STYLE LOGIC\n- **Tone:** Enthusiastic, problem-solving, relatable.\n- **Business Identity:** Select ONE: *Brand*, *Store*, *Seller*.\n- **Narrative Angle:** Focus on usage scenarios, specific pain points resolved, or immediate lifestyle upgrades.\n\n---\n\n## 🎯 Task\nGenerate optimized TKD (Title, Description, Keywords) based on the product content and target keywords.\n\n### 🛑 CRITICAL CONSTRAINT FOR TITLE\n**The Title must be strictly ≤ 60 visible characters (excluding Markdown symbols like `**`).**\nIf the original Product Name is too long, you **MUST shorten it** to its core noun (e.g., change \"Automatic Hydraulic Cutting Machine\" to \"Auto Cutting Machine\").\n\n### 1. Product Title (T) (≤60 characters)\n- **Objective:** Create a clickable, SEO-heavy title without redundancy.\n- **Structure Logic:** `[Specific Variant OR Key Spec] – [Target Keyword]`\n- **CRITICAL ANTI-REDUNDANCY RULES:**\n  1. **NO REPETITION:** If the `Target Keyword` already contains the product category name (e.g., \"Flowers\", \"Machine\"), you must NOT repeat that word in the `[Specific Variant]` part.\n  2. **BE SPECIFIC:** Instead of the generic category, use the specific model/type/material/size as the start noun.\n  3. **Keyword Integrity:** Keep the Target Keyword intact.\n- **Length Control:** Strictly ≤ 60 characters. Truncate attributes, never the keyword.\n\n\n### 2. Description (D) - **CRITICAL UPDATE**\n- **Length:** ≤ 155 characters (strict).\n- **Structure Diversity:** Do NOT start every description with the Product Name.\n- **Content Requirement (Based on Audience):**\n  1. Incorporate **2-3 keywords strictly from the provided list** (wrap in **bold**).\n  2. **MANDATORY DATA INJECTION:**\n     ** Extract **1 functional benefit** or spec.\n\n### 3. Keywords (K)\n*Rules remain the same as your original prompt.*\n\n---\n\n## 📝 Output Format\nTitle: [generated title]\nDescription: [generated description]\nKeywords: **keyword1**, **keyword2**, **keyword3**",
+        "options": {
+          "systemMessage": "=Title (T):Must be less than 60 characters."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        432
+      ],
+      "id": "f1981b7e-1bdc-47ab-9289-87967e693200",
+      "name": "C端描述"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        416,
+        224
+      ],
+      "id": "08b17735-9673-475e-9b67-bdba949d7b72",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -4688,
+        1408
+      ],
+      "id": "8d85bba3-b57a-4d60-bb63-036dee9fb86b",
+      "name": "When chat message received",
+      "webhookId": "929727da-9bf2-4e46-8f4f-bd541acb0692"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gptproto.com/v1/responses",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "sk-f73dcc08aa0e4bd38f3bbd08d13ef9e4"
+            },
+            {
+              "name": "User-Agent",
+              "value": "ueeshop/lilihua/ai-agent"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"gpt-4.1\",\n  \"tools\": [\n    {\n      \"type\": \"web_search_preview\"\n    }\n  ],\n  \"input\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"input_text\",\n          \"text\": \"Act as an SEO Specialist. Please analyze the content of the provided Product Link to understand the product features and unique selling points. Then, based on the provided Main Keywords list, generate the most suitable SEO-optimized Title, Description, and Keyword selection.\\n\\nINPUT DATA:\\nProduct Link: {{ $('Get many database pages').item.json.property_product_url }}\\nMain Keywords List: {{ $('Loop Over Items').item.json.property_target_keywords.toString().replace(/\\n/g, '\\\\n').replace(/\"/g, '\\\\\"') }}\\n\\nREQUIREMENTS:\\n1. Title: Maximum 60 characters. Must be catchy and include at least one high-value keyword. **Do not use colons (:) as separators; use only hyphens (-) or ampersands (&).** **Highlight the used keyword(s) by wrapping them in double asterisks (e.g., **keyword**).**\\n2. Description: Maximum 150 characters. Summarize the product benefits and include the selected keywords naturally. **Highlight the used keywords by wrapping them in double asterisks (e.g., **keyword**).**\\n3. Keywords: Select exactly 3 most relevant keywords from the provided list.\\n\\nOUTPUT FORMAT:\\nPlease provide the result in the following format:\\nTitle: [Content]\\nDescription: [Content]\\nKeywords: [Keyword 1, Keyword 2, Keyword 3]\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        1504
+      ],
+      "id": "66a5ea17-3120-4224-99f9-4a092c5a725c",
+      "name": "B端描述1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// B2B Industrial SEO Meta Description - 10 Styles Library with Fallbacks\nconst styles = [\n  // Style 0: 强调动作与效率\n  \"Start with a strong action Verb (e.g., Source, Manufacture, Customize). Fallback: If no clear action fits, start with 'Engineered for...'\",\n  \n  // Style 1: 强调具体型号或品名 (已修复 SKU 问题)\n  \"Start with the Product Name (Exclude meaningless internal SKUs or item numbers unless it is the core product identity). Fallback: If no name is provided, start with the Primary Material.\",\n  \n  // Style 3: 强调核心技术参数\n  \"Start with a key Technical Specification (e.g., Open mesh design...). Fallback: If no spec is available, start with the Manufacturing Process.\",\n  \n  // Style 4: 强调 B2B 性能优势\n  \"Start with a B2B performance benefit (e.g., Ensure long-lasting durability with...). Fallback: Start with 'Built for high-performance...'\",\n  \n  // Style 5: 强调行业认证与合规 (极高风险，重度降级)\n  \"Start with a Certification or Compliance standard (e.g., ISO-certified...). Fallback: IF NO CERTIFICATION IS IN THE DATA, DO NOT INVENT ONE; strictly start with 'Professional-grade...' instead.\",\n  \n  // Style 6: 强调物理特性\n  \"Start with a prepositional phrase highlighting a physical trait (e.g., With a durable natural finish...). Fallback: Start with 'Featuring...'\",\n  \n  // Style 7: 强调原材料质控\n  \"Start with Material quality or composition (e.g., Crafted from authentic Indonesian rattan...). Fallback: Start with the generic Product Category.\",\n  \n  // Style 8: 强调定制深度与 OEM/ODM 能力\n  \"Start by emphasizing Customization or OEM/ODM capabilities (e.g., Fully customizable OEM solutions...). Fallback: Start with 'Tailored manufacturing for...'\",\n  \n  // Style 9: 强调源头工厂与大宗供应 (定性不定量)\n  \"Start by emphasizing Direct Factory or Bulk Wholesale capabilities WITHOUT inventing exact numbers (e.g., Direct factory wholesale for bulk orders...). Fallback: Start with 'Scalable manufacturing capabilities for...'\"\n];\n\n// 获取当前循环的索引 (0 到 9)\n// 保证批量跑 100 个产品时，10 种风格均匀分布，避免 SERP 高度同质化\nconst index = $runIndex % styles.length;\n\nreturn {\n  json: {\n    // 将选中的风格指令及其降级策略传给 AI 节点\n    selected_style: styles[index], \n    ...$input.item.json \n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -208,
+        32
+      ],
+      "id": "6cf50634-8c8e-4d64-8455-81118b4d6c86",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many database pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many database pages": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "主页",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model6": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Produname",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model8": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "SHORART",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ABOUTFAQ",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "转成下载的文件docx1": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Update a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a database page": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "产品": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "主页": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ABOUTFAQ": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SHORART": {
+      "main": [
+        [
+          {
+            "node": "ABOUTFAQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Produname": {
+      "main": [
+        [
+          {
+            "node": "SHORART",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model15": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "shert",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "shert": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model17": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent9",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent9": {
+      "main": [
+        [
+          {
+            "node": "Produname",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model18": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent6",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent6": {
+      "main": [
+        [
+          {
+            "node": "AI Agent9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "产品",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript9": {
+      "main": [
+        [
+          {
+            "node": "FAQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript10": {
+      "main": [
+        [
+          {
+            "node": "AI Agent6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model19": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "元描述1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "转成下载的文件docx1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "C端描述",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "B端描述",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "B端描述": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "C端描述",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "C端描述": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "shert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "元描述1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "B端描述",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e472cda3-ed4d-4246-94e7-468cac3eaeb6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4dc678d8303870990289c1cba036ee3ba77009f0608da13070f14d7a83902fb5"
+  },
+  "id": "g3dd7Pu06749uJs8",
+  "tags": []
+}
